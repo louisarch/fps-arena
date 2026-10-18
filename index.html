@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#071014" />
+    <meta name="description" content="Pulse Arena — arena FPS single-player berirama cepat." />
+    <title>Pulse Arena — Arena 01</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main class="game-shell" aria-label="Pulse Arena">
+      <canvas id="arena" aria-label="Arena 3D Pulse Arena"></canvas>
+      <div class="scene-vignette" aria-hidden="true"></div>
+      <div class="scene-grain" aria-hidden="true"></div>
+
+      <section id="hud" class="hud" aria-label="Status permainan" hidden>
+        <div class="hud-top">
+          <div class="health-module hud-module">
+            <div class="module-heading">
+              <span class="module-icon health-icon" aria-hidden="true">+</span>
+              <span class="module-label">INTEGRITAS</span>
+              <span id="health" class="module-value">100</span>
+            </div>
+            <div class="meter-track" aria-label="Kesehatan pemain">
+              <span id="health-bar" class="meter-fill"></span>
+            </div>
+          </div>
+
+          <div class="hud-top-center">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>ARENA <b>01</b></span>
+          </div>
+
+          <div class="ammo-module hud-module">
+            <span class="ammo-caption">AMUNISI <span class="ammo-dot" aria-hidden="true"></span></span>
+            <div class="ammo-reading"><span id="ammo">12</span><span class="ammo-divider">/</span><span id="reserve">48</span></div>
+            <span class="ammo-foot">MAGASIN <i>·</i> CADANGAN</span>
+          </div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="bottom-spacer" aria-hidden="true"></div>
+          <div class="combat-summary" aria-label="Statistik sesi">
+            <div class="summary-cell">
+              <span class="summary-label">GELOMBANG</span>
+              <span id="wave" class="summary-value">01<span class="summary-total"> / 03</span></span>
+            </div>
+            <span class="summary-rule" aria-hidden="true"></span>
+            <div class="summary-cell score-cell">
+              <span class="summary-label">SKOR</span>
+              <span id="score" class="summary-value">000000</span>
+            </div>
+            <span class="summary-rule" aria-hidden="true"></span>
+            <div class="summary-cell accuracy-cell">
+              <span class="summary-label">AKURASI</span>
+              <span id="accuracy" class="summary-value">0<span class="summary-percent">%</span></span>
+            </div>
+          </div>
+          <div class="enemies-chip"><span class="enemy-pip" aria-hidden="true"></span><span id="enemies">03</span><span class="enemies-label">TARGET</span></div>
+        </div>
+      </section>
+
+      <div id="crosshair" class="crosshair" aria-hidden="true" hidden>
+        <span class="crosshair-line crosshair-top"></span>
+        <span class="crosshair-line crosshair-right"></span>
+        <span class="crosshair-line crosshair-bottom"></span>
+        <span class="crosshair-line crosshair-left"></span>
+        <span class="crosshair-core"></span>
+      </div>
+
+      <div id="feedback" class="feedback" aria-live="polite" aria-atomic="true"></div>
+      <div id="damage-overlay" class="damage-overlay" aria-hidden="true"></div>
+
+      <button id="pause-button" class="pause-button icon-button" type="button" aria-label="Jeda permainan" title="Jeda permainan" hidden>
+        <span class="pause-glyph" aria-hidden="true"><i></i><i></i></span>
+      </button>
+
+      <section id="overlay" class="overlay" aria-modal="true" role="dialog" aria-labelledby="title">
+        <div class="overlay-topline">
+          <a class="wordmark" href="#" aria-label="Pulse Arena — beranda">
+            <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>PULSE<span class="wordmark-separator">/</span>ARENA</span>
+          </a>
+          <div class="system-status" aria-label="Status sistem">
+            <span class="status-item"><i class="status-led" aria-hidden="true"></i><span>WEBGL <b id="webgl-status">SIAP</b></span></span>
+            <span class="status-divider" aria-hidden="true"></span>
+            <span class="status-item"><i class="status-led status-led-muted" aria-hidden="true"></i><span>KONTROL <b id="input-status">MOUSE / SENTUH</b></span></span>
+          </div>
+        </div>
+
+        <div id="panel" class="overlay-content">
+          <div class="intro-column">
+            <div class="eyebrow-row">
+              <span class="eyebrow-index">01</span>
+              <span class="eyebrow-rule" aria-hidden="true"></span>
+              <p id="eyebrow" class="eyebrow">SIMULASI TEMPUR // PEMAIN TUNGGAL</p>
+            </div>
+            <h1 id="title" class="hero-title"><span>PULSE</span><span class="hero-title-second">ARENA<span class="title-period">.</span></span></h1>
+            <p id="description" class="hero-description">Satu arena. Tiga gelombang. Tetap bergerak, baca ancaman, dan jadikan setiap tembakan berarti.</p>
+
+            <div id="stats" class="result-stats" hidden>
+              <div class="result-stat"><span class="result-label">SKOR AKHIR</span><strong id="results">000000</strong></div>
+              <div class="result-stat"><span class="result-label">AKURASI</span><strong id="result-accuracy">0%</strong></div>
+              <div class="result-stat"><span class="result-label">TARGET</span><strong id="result-targets">0 / 12</strong></div>
+            </div>
+
+            <div class="arena-specs" aria-label="Detail simulasi">
+              <div class="spec-block"><span class="spec-label">LOKASI</span><strong>ARENA<span>01</span></strong></div>
+              <span class="spec-divider" aria-hidden="true"></span>
+              <div class="spec-block"><span class="spec-label">MODE</span><strong>PEMAIN TUNGGAL</strong></div>
+              <span class="spec-divider" aria-hidden="true"></span>
+              <div class="spec-block"><span class="spec-label">OPERASI</span><strong>03 <span>GELOMBANG</span></strong></div>
+            </div>
+
+            <div class="action-row">
+              <button id="primary" class="primary-button" type="button" aria-label="Mulai permainan">
+                <span class="button-content"><span class="button-icon" aria-hidden="true">↗</span><span>MULAI SIMULASI</span></span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+              <button id="secondary" class="secondary-button" type="button" aria-label="Kembali ke menu" hidden>KEMBALI KE MENU</button>
+              <p class="action-note"><span class="keycap">↵</span><span>SIAPKAN DIRI</span></p>
+            </div>
+          </div>
+
+          <aside class="briefing-column" aria-label="Briefing misi">
+            <div class="briefing-head"><span class="briefing-kicker">BRIEFING MISI</span><span class="briefing-code">PA—01 <i>///</i></span></div>
+            <div class="briefing-rule" aria-hidden="true"></div>
+            <p class="briefing-copy">Unit target aktif. Bertahan dari semua gelombang dan amankan sektor.</p>
+            <div id="controls-help" class="control-grid">
+              <div class="control-card">
+                <span class="control-number">01</span>
+                <span class="control-symbol movement-symbol" aria-hidden="true"><i>W</i><i>A</i><i>S</i><i>D</i></span>
+                <span class="control-name">GERAK</span>
+                <span class="control-detail">Maju · kiri · mundur · kanan</span>
+              </div>
+              <div class="control-card">
+                <span class="control-number">02</span>
+                <span class="control-symbol mouse-symbol" aria-hidden="true"><i></i></span>
+                <span class="control-name">BIDIK &amp; TEMBAK</span>
+                <span class="control-detail">Arahkan pandang · klik kiri</span>
+              </div>
+              <div class="control-card">
+                <span class="control-number">03</span>
+                <span class="control-symbol key-symbol" aria-hidden="true">R</span>
+                <span class="control-name">MUAT ULANG</span>
+                <span class="control-detail">Isi magasin kembali</span>
+              </div>
+              <div class="control-card">
+                <span class="control-number">04</span>
+                <span class="control-symbol shift-symbol" aria-hidden="true">⇧</span>
+                <span class="control-name">SPRINT</span>
+                <span class="control-detail">Tahan Shift untuk berlari</span>
+              </div>
+            </div>
+            <div class="touch-briefing"><span class="touch-briefing-icon" aria-hidden="true">⌖</span><span>LAYAR SENTUH</span><b>Joystick · Geser · Tembak</b></div>
+            <div id="support" class="support-note" role="status">Sistem siap. Klik mulai untuk memasuki arena.</div>
+          </aside>
+        </div>
+
+        <div class="overlay-footer"><span>PA // SISTEM LATIHAN TEMPUR</span><span>VERSI 1.0 <i>·</i> SIMULASI LOKAL</span></div>
+      </section>
+
+      <div id="touch-controls" class="touch-controls" aria-label="Kontrol sentuh" hidden>
+        <div id="look-pad" class="look-pad" aria-label="Geser untuk mengubah arah pandang"></div>
+        <div id="joystick" class="joystick" role="application" aria-label="Joystick gerak">
+          <span class="joystick-ring" aria-hidden="true"></span>
+          <span id="stick" class="stick" aria-hidden="true"></span>
+          <span class="joystick-label">GERAK</span>
+        </div>
+        <div class="touch-actions" aria-label="Aksi sentuh">
+          <button id="sprint-button" class="touch-action sprint-button" type="button" aria-label="Tahan untuk sprint"><span class="sprint-icon" aria-hidden="true">⇧</span><span>SPRINT</span></button>
+          <button id="touch-reload" class="touch-action touch-reload" type="button" aria-label="Muat ulang"><span aria-hidden="true">↻</span><span>ISI</span></button>
+          <button id="fire-button" class="fire-button" type="button" aria-label="Tembak"><span class="fire-inner" aria-hidden="true"></span><span class="fire-label">TEMBAK</span></button>
+        </div>
+      </div>
+
+      <button id="reload-button" class="reload-button" type="button" aria-label="Muat ulang" title="Muat ulang (R)" hidden><span aria-hidden="true">↻</span><span>ISI ULANG</span><kbd>R</kbd></button>
+      <button id="mute-button" class="mute-button icon-button" type="button" aria-label="Matikan suara" title="Suara aktif" hidden><span class="speaker-icon" aria-hidden="true"><i></i><b></b></span></button>
+
+      <div class="corner-coordinate" aria-hidden="true"><span>SEKTOR 01—A</span><i>34° 08′ N</i></div>
+      <div class="reticle-label" aria-hidden="true"><span>+</span> SISTEM AKTIF</div>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

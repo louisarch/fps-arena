@@ -1,0 +1,25 @@
+{
+  "name": "pulse-arena",
+  "version": "1.0.0",
+  "description": "FPS browser orisinal: tiga gelombang robot dalam arena prosedural",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build --base=./",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/game.test.js",
+    "test:browser": "playwright test"
+  },
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "vite": "^8.3.4"
+  },
+  "private": true
+}
