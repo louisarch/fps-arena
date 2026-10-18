@@ -253,3 +253,7 @@ body.playing .reticle-label { opacity: 0; }
 .feedback { max-width: 72vw; line-height: 1.5; text-align: center; }
 @media (max-width: 600px) { .mute-button { top: 116px; right: 14px; } .hud-top-center { display: none; } }
 @media (max-height: 480px) { .mute-button { top: 115px; right: 18px; } }
+@media (max-width: 600px) and (orientation: portrait) {
+  body.touch .hud-bottom { bottom: 165px; }
+  body.touch .corner-coordinate, body.touch .reticle-label { display: none; }
+}
